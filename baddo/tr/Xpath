@@ -1,0 +1,8 @@
+sign in = '//*[@id="header"]/div/div[2]/div/div/a'
+
+email = '//*[@id="signin-name"]'
+
+pass = '//*[@id="signin-password"]'
+
+
+submit = '//*[@id="signin-submit"]/button'

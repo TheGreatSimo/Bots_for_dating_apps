@@ -1,0 +1,24 @@
+1 : If you don't have Python 3 installed on your Mac, you can download it from the official website: https://www.python.org/downloads/mac-osx/. Once the download is complete, open the installer and follow the installation instructions.
+
+2 : Open Terminal on your Mac. You can do this by going to the Launchpad and typing "Terminal" in the search bar.
+
+In Terminal, install the Selenium package by typing the following command and pressing Enter:
+
+pip3 install selenium
+
+3 : Download the Chromedriver from the official website: https://sites.google.com/a/chromium.org/chromedriver/downloads and installed it (make sure it's the same version as your chrome)
+
+4 : In the Python file, replace the following lines  (26/27) of code with your actual email and password for your account
+
+email = "Your email or number without any spaces"
+password = "Your password without any spaces"
+
+
+5 : In Terminal, navigate to the directory where the Python file is saved. For example, if the file is saved in the Downloads folder, you can type the following command and press Enter:
+cd Downloads
+
+6 : Now, to run the Python file, type the following command and press Enter:
+python3 bot.py
+
+
+I hope these steps are more helpful. If you're still having trouble, please let me know and we can schedule a call on Zoom to walk through the steps together
