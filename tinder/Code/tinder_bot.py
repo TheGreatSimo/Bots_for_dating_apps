@@ -1,41 +1,34 @@
-#!/usr/bin/env python3 
+#!/usr/bin/env python3
 
-
-from selenium import webdriver
-import undetected_chromedriver as uc
+import random
+import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
-from selenium.webdriver.chrome.options import Options as opt
-import random , time
+from selenium.webdriver.chrome.options import Options as ChromeOptions
+import undetected_chromedriver as uc
 
-juba = opt()
+juba = ChromeOptions()
+juba.add_argument('--profile-directory=')
+juba.add_argument('--user-data-dir=')
 
-# Paste the path of an empty directory(folder) after the = sign 
-juba.add_argument('--user-data-dir=/Users/dennismorales/desktop/accounts/data/1')
+driver = uc.Chrome(options=juba)
+time.sleep(3)
 
-# Add the path to the chromedriver executable
-uc.install()
-driver = uc.Chrome(executable_path='/usr/local/bin/chromedriver', options=juba) 
-
-driver.implicitly_wait(10)
-
-# Navigate to url
+# Navigate to URL
 driver.get("https://tinder.com/app/recs")
 
-time.sleep(70)
-# driver.implicitly_wait(10)
+wait = WebDriverWait(driver, 100000000)
+like_button = "/html/body/div[1]/div/div[1]/div/main/div[1]/div/div/div[1]/div[1]/div/div[3]/div/div[4]/button"
+wait.until(EC.visibility_of_element_located((By.XPATH, like_button)))
 
 active_element = driver.switch_to.active_element
 
 
-
 def dismiss_alert():
-    """ handle any pop up if any """
-
-    # Deny confirmation of email
+    """Handle any pop-up if any"""
     try:
         xpath = './/main/div/div[1]/div[2]/button[2]'
         remindmelater = driver.find_element(By.XPATH, xpath)
@@ -44,7 +37,6 @@ def dismiss_alert():
     except:
         pass
 
-    # Deny add location popup
     try:
         xpath = ".//*[contains(text(), 'No Thanks')]"
         nothanks = driver.find_element(By.XPATH, xpath)
@@ -67,69 +59,59 @@ def dismiss_alert():
     try:
         driver.refresh()
     except:
-        pass 
-
+        pass
 
 
 def intercart():
-    """ get the bio from the profile and save into a csv file """
+    """Try to show the bio or something for some reason I think that would be like human like behaviour """
     active_element.send_keys(Keys.ARROW_UP)
-    time.sleep(1)
+    time.sleep(2)
     active_element.send_keys(Keys.ARROW_DOWN)
 
 
-def go_through_picutre():
-    for i in range(3):
+def go_through_picture():
+    for _ in range(3):
         active_element.send_keys(Keys.SPACE)
         time.sleep(1)
 
 
 def swipe():
-    # like 4 times and likes on time 
-    """ swip just like a human """  
-    button = [Keys.RIGHT , Keys.LEFT ]
-    random_button = random.choice(button)
+    """Swipe just like a human (Random stuff)"""
+    buttons = [Keys.RIGHT, Keys.LEFT]
+    random_button = random.choice(buttons)
     active_element.send_keys(random_button)
-
-
+    time.sleep(2)
 
 
 def send_message():
-
-    """Send a random custom message if a match is found."""
-    time.sleep(1)
+    """Send a random custom message if a match is found"""
     try:
         # Extract the match's name from the profile page
-        name = driver.find_element(By.XPATH, '/html/body/div[1]/div/div[1]/div/main/div[2]/main/div/div[1]/div/div[3]/div[2]')
-        name = name.text.split()
-        name = name[0]
-        # Sending a message including a message saving hey 
+        name = driver.find_element(By.XPATH, '/html/body/div[1]/div/div[1]/div/main/div[2]/main/div/div[1]/div/div[3]/div[2]').text.split()[0]
+
         try:
             message_box = driver.find_element(By.XPATH, '/html/body/div[1]/div/div[1]/div/main/div[2]/main/div/div[1]/div/div[3]/div[3]/form/textarea')
-            message =  f"Hey {name}" 
+            message = f"Hey {name}"
+            message_box.send_keys(message)
+            time.sleep(3)
+            message_box.send_keys(Keys.RETURN)
+        except:
+            message_box = driver.find_element(By.CSS_SELECTOR, '#s-1698539549')
+            message = f"Hey {name}"
             message_box.send_keys(message)
             time.sleep(1)
             message_box.send_keys(Keys.RETURN)
 
-        except:
-            message_box1 = driver.find_element(By.CSS_SELECTOR , '#s-1698539549')
-            message =  f"Hey {name} "
-            message_box.send_keys(message)
-            time.sleep(1)
-            message_box.send_keys(Keys.RETURN)
-            
     except:
-        print("No match")
         pass
 
 
-
 def run_bot(num_swipes):
-    """Run the bot for a specified number of swipes."""
-    for i in range(1000):
+    """Run the bot for a specified number of swipes"""
+    for _ in range(num_swipes):
         try:
             intercart()
-            go_through_picutre
+            go_through_picture()
             swipe()
             try:
                 send_message()
@@ -137,7 +119,6 @@ def run_bot(num_swipes):
                 pass
         except:
             dismiss_alert()
-
 
 
 if __name__ == "__main__":
